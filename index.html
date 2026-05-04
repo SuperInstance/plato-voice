@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLATO Voice — The Deckhand Who Never Forgets</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0a1628 0%, #1a2744 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #00d4ff, #7b2fff);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        header h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        header .subtitle {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* Room selector */
+        .room-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .room-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        
+        .room-btn:hover { background: rgba(255,255,255,0.1); }
+        
+        .room-btn.active {
+            background: rgba(0,212,255,0.2);
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+        
+        /* Voice input */
+        .voice-input {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .mic-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #7b2fff, #00d4ff);
+            cursor: pointer;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 1rem;
+        }
+        
+        .mic-btn:hover { transform: scale(1.05); }
+        
+        .mic-btn.recording {
+            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 30px rgba(0,212,255,0.5);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0,212,255,0.3); }
+            50% { box-shadow: 0 0 40px rgba(0,212,255,0.6); }
+        }
+        
+        .status-text {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .status-text.listening { color: #00d4ff; }
+        
+        /* Transcript */
+        .transcript {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            min-height: 60px;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+        
+        .transcript .interim {
+            color: #64748b;
+        }
+        
+        /* Recent tiles */
+        .recent-tiles {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .recent-tiles h3 {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .tile {
+            background: rgba(255,255,255,0.03);
+            border-left: 3px solid #00d4ff;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tile .question {
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            margin-bottom: 0.25rem;
+        }
+        
+        .tile .meta {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .tile.own {
+            border-left-color: #7b2fff;
+            background: rgba(123,47,255,0.1);
+        }
+        
+        /* Response area */
+        .response {
+            background: rgba(0,212,255,0.1);
+            border: 1px solid rgba(0,212,255,0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .response.visible { display: block; }
+        
+        .response .speaker {
+            font-size: 0.75rem;
+            color: #00d4ff;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 1rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.75rem;
+            color: #64748b;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">🔮</div>
+        <div>
+            <h1>PLATO Voice</h1>
+            <div class="subtitle">The Deckhand Who Never Forgets</div>
+        </div>
+    </header>
+    
+    <div class="main">
+        <!-- Room selector -->
+        <div class="room-selector">
+            <button class="room-btn active" data-room="bridge">Bridge</button>
+            <button class="room-btn" data-room="buoy-7">Buoy 7</button>
+            <button class="room-btn" data-room="engine-room">Engine Room</button>
+            <button class="room-btn" data-room="hold-2">Hold 2</button>
+            <button class="room-btn" data-room="deck">Deck</button>
+            <button class="room-btn" data-room="dockside">Dockside</button>
+        </div>
+        
+        <!-- Voice input -->
+        <div class="voice-input">
+            <button class="mic-btn" id="micBtn">🎤</button>
+            <div class="status-text" id="statusText">Tap to speak</div>
+            <div class="transcript" id="transcript"></div>
+        </div>
+        
+        <!-- Response from fleet -->
+        <div class="response" id="responseArea">
+            <div class="speaker">Fleet</div>
+            <div id="responseText"></div>
+        </div>
+        
+        <!-- Recent tiles from this room -->
+        <div class="recent-tiles">
+            <h3>Recent in <span id="roomName">bridge</span></h3>
+            <div id="tileList"></div>
+        </div>
+    </div>
+    
+    <footer>
+        PLATO provides the ether for agents to swim.
+    </footer>
+    
+    <script>
+        // PLATO Voice Interface
+        // Connects spoken words to PLATO rooms — the deckhand who never forgets
+        
+        const PLATO_URL = 'http://localhost:8847';
+        let currentRoom = 'bridge';
+        let recognition = null;
+        let isRecording = false;
+        
+        // Initialize speech recognition
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+            
+            recognition.onresult = (event) => {
+                let transcript = '';
+                let interim = '';
+                
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const result = event.results[i];
+                    if (result.isFinal) {
+                        transcript += result[0].transcript;
+                    } else {
+                        interim += result[0].transcript;
+                    }
+                }
+                
+                document.getElementById('transcript').innerHTML = 
+                    transcript + 
+                    (interim ? `<span class="interim">${interim}</span>` : '');
+                
+                if (transcript.trim() && !interim) {
+                    submitToPLATO(transcript.trim());
+                }
+            };
+            
+            recognition.onerror = (event) => {
+                console.error('Speech error:', event.error);
+                stopRecording();
+            };
+            
+            recognition.onend = () => {
+                stopRecording();
+            };
+        }
+        
+        // Mic button handlers
+        document.getElementById('micBtn').addEventListener('click', () => {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        });
+        
+        function startRecording() {
+            if (!recognition) {
+                document.getElementById('statusText').textContent = 'Speech not supported — type instead';
+                return;
+            }
+            
+            isRecording = true;
+            document.getElementById('micBtn').classList.add('recording');
+            document.getElementById('statusText').textContent = 'Listening...';
+            document.getElementById('statusText').classList.add('listening');
+            recognition.start();
+        }
+        
+        function stopRecording() {
+            isRecording = false;
+            document.getElementById('micBtn').classList.remove('recording');
+            document.getElementById('statusText').textContent = 'Tap to speak';
+            document.getElementById('statusText').classList.remove('listening');
+            if (recognition) recognition.stop();
+        }
+        
+        // Room selection
+        document.querySelectorAll('.room-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.room-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentRoom = btn.dataset.room;
+                document.getElementById('roomName').textContent = currentRoom;
+                loadTiles(currentRoom);
+            });
+        });
+        
+        // Submit to PLATO
+        async function submitToPLATO(text) {
+            const tile = {
+                question: text,
+                answer: '',
+                domain: currentRoom,
+                agent: 'voice:' + navigator.userAgent
+            };
+            
+            try {
+                await fetch(`${PLATO_URL}/rooms/${currentRoom}/tiles`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(tile)
+                });
+                
+                // Show confirmation
+                document.getElementById('transcript').innerHTML = 
+                    `<span style="color:#00ff88">✓ ${text}</span>`;
+                
+                // Reload tiles
+                loadTiles(currentRoom);
+                
+                // Get fleet response
+                getFleetResponse(text);
+                
+            } catch (err) {
+                console.error('Failed to submit:', err);
+                document.getElementById('transcript').innerHTML = 
+                    `<span style="color:#ef5350">Error — try again</span>`;
+            }
+        }
+        
+        // Get response from fleet agents
+        async function getFleetResponse(question) {
+            // For prototype: query recent tiles that might answer the question
+            // Full implementation: route to appropriate fleet agent
+            const responseEl = document.getElementById('responseArea');
+            const responseText = document.getElementById('responseText');
+            
+            responseEl.classList.add('visible');
+            
+            // Simple prototype response based on room
+            const responses = {
+                'bridge': 'Fleet sees the same weather. Checking current conditions...',
+                'buoy-7': 'Three other captains reported good chum activity here this week.',
+                'engine-room': 'Logging the observation. Any temperature changes?',
+                'deck': 'Deck crew noted the same. Tracking the haul.',
+                'hold-2': 'Recording. Current capacity: ___%',
+                'dockside': 'Dockside crew will see this. Loading when you arrive?'
+            };
+            
+            responseText.textContent = responses[currentRoom] || 'Acknowledged.';
+        }
+        
+        // Load recent tiles from room
+        async function loadTiles(room) {
+            const tileList = document.getElementById('tileList');
+            tileList.innerHTML = 'Loading...';
+            
+            try {
+                const res = await fetch(`${PLATO_URL}/rooms/${room}/tiles?limit=10`);
+                const tiles = await res.json();
+                
+                if (!tiles || tiles.length === 0) {
+                    tileList.innerHTML = '<em style="color:#64748b">No observations yet. Be the first.</em>';
+                    return;
+                }
+                
+                tileList.innerHTML = tiles.map(tile => `
+                    <div class="tile">
+                        <div class="question">${tile.question || tile.content || tile.text || '—'}</div>
+                        <div class="meta">${tile.agent || 'unknown'} · ${tile.created || 'recently'}</div>
+                    </div>
+                `).join('');
+                
+            } catch (err) {
+                tileList.innerHTML = '<em style="color:#ef5350">Could not load room. Is PLATO running?</em>';
+            }
+        }
+        
+        // Initial load
+        loadTiles('bridge');
+        
+        // Keep room alive
+        setInterval(() => loadTiles(currentRoom), 30000);
+    </script>
+</body>
+</html>
