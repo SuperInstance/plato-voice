@@ -14,196 +14,278 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         header {
-            padding: 1.5rem 2rem;
+            padding: 1rem 1rem;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.75rem;
         }
-        
-        .logo {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #00d4ff, #7b2fff);
-            border-radius: 8px;
+
+        .logo { width: 36px; height: 36px; background: linear-gradient(135deg, #00d4ff, #7b2fff); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+
+        header h1 { font-size: 1.1rem; font-weight: 600; }
+        header .subtitle { font-size: 0.8rem; color: #64748b; }
+
+        /* Instinct status bar */
+        .instinct-bar {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0,0,0,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.7rem;
+            flex-wrap: wrap;
+        }
+        .instinct-indicator {
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
+            gap: 0.35rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
         }
-        
-        header h1 {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        
-        header .subtitle {
-            font-size: 0.85rem;
-            color: #64748b;
-        }
-        
+        .instinct-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
+        .instinct-dot.warn { background: #f59e0b; }
+        .instinct-dot.critical { background: #ef5350; animation: pulse-dot 1s infinite; }
+        .instinct-dot.flee { background: #f97316; }
+        .instinct-dot.guard { background: #3b82f6; }
+        @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .instinct-label { color: #94a3b8; }
+        .instinct-indicator.blocked .instinct-label { color: #ef5350; }
+
+        /* Main layout */
         .main {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 2rem;
-            max-width: 800px;
+            display: grid;
+            grid-template-columns: 1fr 240px;
+            gap: 1rem;
+            padding: 1rem;
+            max-width: 1200px;
             margin: 0 auto;
             width: 100%;
         }
-        
+        @media (max-width: 768px) {
+            .main { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+        }
+
+        .col-left { display: flex; flex-direction: column; gap: 1rem; }
+
         /* Room selector */
         .room-selector {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
+            gap: 0.4rem;
+            margin-bottom: 0.5rem;
             flex-wrap: wrap;
         }
-        
         .room-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
+            padding: 0.4rem 0.8rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 16px;
             background: rgba(255,255,255,0.05);
             color: #94a3b8;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             transition: all 0.2s;
         }
-        
         .room-btn:hover { background: rgba(255,255,255,0.1); }
-        
-        .room-btn.active {
-            background: rgba(0,212,255,0.2);
-            border-color: #00d4ff;
-            color: #00d4ff;
+        .room-btn.active { background: rgba(0,212,255,0.2); border-color: #00d4ff; color: #00d4ff; }
+
+        /* Trust context badge */
+        .trust-context {
+            font-size: 0.7rem;
+            color: #64748b;
+            padding: 0.25rem 0.5rem;
+            background: rgba(123,47,255,0.15);
+            border-radius: 6px;
+            margin-left: auto;
         }
-        
+
         /* Voice input */
         .voice-input {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 3rem;
+            padding: 2rem;
             background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
         }
-        
+
+        .mode-toggle {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .mode-btn {
+            padding: 0.35rem 0.75rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+        .mode-btn.active { background: rgba(123,47,255,0.25); border-color: #7b2fff; color: #a78bfa; }
+
         .mic-btn {
-            width: 80px;
-            height: 80px;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
             border: none;
             background: linear-gradient(135deg, #7b2fff, #00d4ff);
             cursor: pointer;
-            font-size: 2rem;
+            font-size: 1.8rem;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: transform 0.2s, box-shadow 0.2s;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
+            -webkit-tap-highlight-color: transparent;
         }
-        
         .mic-btn:hover { transform: scale(1.05); }
-        
-        .mic-btn.recording {
-            animation: pulse 1.5s infinite;
-            box-shadow: 0 0 30px rgba(0,212,255,0.5);
-        }
-        
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(0,212,255,0.3); }
-            50% { box-shadow: 0 0 40px rgba(0,212,255,0.6); }
-        }
-        
-        .status-text {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-        
+        .mic-btn.recording { animation: pulse-rec 1.5s infinite; box-shadow: 0 0 30px rgba(0,212,255,0.5); }
+        .mic-btn.push-to-talk { background: linear-gradient(135deg, #f97316, #eab308); }
+        .mic-btn.push-to-talk:active, .mic-btn.push-to-talk.pressed { transform: scale(0.95); box-shadow: 0 0 20px rgba(249,115,22,0.6); }
+        @keyframes pulse-rec { 0%,100% { box-shadow: 0 0 20px rgba(0,212,255,0.3); } 50% { box-shadow: 0 0 40px rgba(0,212,255,0.6); } }
+
+        .status-text { color: #64748b; font-size: 0.85rem; margin-bottom: 0.5rem; }
         .status-text.listening { color: #00d4ff; }
-        
+
+        .gain-slider {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+        }
+        .gain-slider input { width: 80px; accent-color: #00d4ff; }
+
+        /* Wake word indicator */
+        .wake-word-status {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 0.35rem;
+        }
+        .wake-word-status.active { color: #22c55e; }
+
         /* Transcript */
         .transcript {
             background: rgba(255,255,255,0.05);
             border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            min-height: 60px;
-            font-size: 1.1rem;
+            padding: 0.75rem;
+            margin-top: 0.75rem;
+            min-height: 48px;
+            font-size: 1rem;
             color: #fff;
+            width: 100%;
+            text-align: center;
         }
-        
-        .transcript .interim {
-            color: #64748b;
-        }
-        
-        /* Recent tiles */
-        .recent-tiles {
-            flex: 1;
-            overflow-y: auto;
-        }
-        
-        .recent-tiles h3 {
+        .transcript .interim { color: #64748b; }
+
+        /* Reflex block overlay */
+        .reflex-blocked {
+            background: rgba(239,68,68,0.15);
+            border: 1px solid rgba(239,68,68,0.3);
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-top: 0.75rem;
             font-size: 0.85rem;
-            color: #64748b;
-            margin-bottom: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            color: #ef5350;
+            text-align: center;
+            display: none;
         }
-        
+        .reflex-blocked.visible { display: block; }
+
+        /* Response area */
+        .response {
+            background: rgba(0,212,255,0.08);
+            border: 1px solid rgba(0,212,255,0.2);
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-top: 0.75rem;
+            display: none;
+        }
+        .response.visible { display: block; }
+        .response .speaker { font-size: 0.7rem; color: #00d4ff; text-transform: uppercase; margin-bottom: 0.35rem; }
+
+        /* Recent tiles */
+        .recent-tiles { flex: 1; overflow-y: auto; max-height: 280px; }
+        .recent-tiles h3 { font-size: 0.75rem; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
         .tile {
             background: rgba(255,255,255,0.03);
             border-left: 3px solid #00d4ff;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 0 8px 8px 0;
+            padding: 0.6rem 0.8rem;
+            margin-bottom: 0.4rem;
+            border-radius: 0 6px 6px 0;
         }
-        
-        .tile .question {
-            font-size: 0.95rem;
-            color: #e2e8f0;
+        .tile.own { border-left-color: #7b2fff; background: rgba(123,47,255,0.08); }
+        .tile .question { font-size: 0.85rem; color: #e2e8f0; margin-bottom: 0.2rem; }
+        .tile .meta { font-size: 0.7rem; color: #64748b; }
+
+        /* Sidebar */
+        .sidebar { display: flex; flex-direction: column; gap: 1rem; }
+
+        /* Rooms panel */
+        .rooms-panel {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 0.75rem;
+        }
+        .rooms-panel h3 { font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+        .room-entry {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem;
+            border-radius: 6px;
             margin-bottom: 0.25rem;
+            cursor: pointer;
+            transition: background 0.15s;
         }
-        
-        .tile .meta {
-            font-size: 0.75rem;
-            color: #64748b;
+        .room-entry:hover { background: rgba(255,255,255,0.05); }
+        .room-entry.active { background: rgba(0,212,255,0.1); }
+        .room-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+        .room-dot.idle { background: #64748b; }
+        .room-dot.active { background: #00d4ff; }
+        .room-name { font-size: 0.8rem; flex: 1; }
+        .room-activity { font-size: 0.65rem; color: #64748b; }
+        .room-trust { font-size: 0.65rem; color: #a78bfa; }
+
+        /* Activity stream */
+        .activity-stream {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 0.75rem;
+            flex: 1;
+            overflow-y: auto;
+            max-height: 200px;
         }
-        
-        .tile.own {
-            border-left-color: #7b2fff;
-            background: rgba(123,47,255,0.1);
+        .activity-stream h3 { font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+        .activity-entry {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            padding: 0.35rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            gap: 0.4rem;
         }
-        
-        /* Response area */
-        .response {
-            background: rgba(0,212,255,0.1);
-            border: 1px solid rgba(0,212,255,0.3);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1rem;
-            display: none;
-        }
-        
-        .response.visible { display: block; }
-        
-        .response .speaker {
-            font-size: 0.75rem;
-            color: #00d4ff;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
-        
-        /* Footer */
+        .activity-entry:last-child { border-bottom: none; }
+        .activity-time { color: #475569; flex-shrink: 0; }
+        .activity-text { }
+        .activity-entry.own { color: #c4b5fd; }
+
         footer {
-            padding: 1rem 2rem;
+            padding: 0.75rem 1rem;
             border-top: 1px solid rgba(255,255,255,0.1);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #64748b;
             text-align: center;
         }
@@ -217,218 +299,654 @@
             <div class="subtitle">The Deckhand Who Never Forgets</div>
         </div>
     </header>
-    
+
+    <!-- Instinct status bar -->
+    <div class="instinct-bar">
+        <div class="instinct-indicator" id="surviveInd">
+            <div class="instinct-dot" id="surviveDot"></div>
+            <span class="instinct-label">SURVIVE</span>
+        </div>
+        <div class="instinct-indicator" id="fleeInd">
+            <div class="instinct-dot" id="fleeDot"></div>
+            <span class="instinct-label">FLEE</span>
+        </div>
+        <div class="instinct-indicator" id="guardInd">
+            <div class="instinct-dot guard" id="guardDot"></div>
+            <span class="instinct-label">GUARD</span>
+        </div>
+        <div class="instinct-indicator">
+            <div class="instinct-dot" id="energyDot"></div>
+            <span class="instinct-label">Energy <span id="energyVal">100%</span></span>
+        </div>
+        <div class="trust-context" id="trustContext">Trust: —</div>
+    </div>
+
     <div class="main">
-        <!-- Room selector -->
-        <div class="room-selector">
-            <button class="room-btn active" data-room="bridge">Bridge</button>
-            <button class="room-btn" data-room="buoy-7">Buoy 7</button>
-            <button class="room-btn" data-room="engine-room">Engine Room</button>
-            <button class="room-btn" data-room="hold-2">Hold 2</button>
-            <button class="room-btn" data-room="deck">Deck</button>
-            <button class="room-btn" data-room="dockside">Dockside</button>
+        <div class="col-left">
+            <!-- Room selector -->
+            <div class="room-selector">
+                <button class="room-btn active" data-room="bridge">Bridge</button>
+                <button class="room-btn" data-room="buoy-7">Buoy 7</button>
+                <button class="room-btn" data-room="engine-room">Engine Room</button>
+                <button class="room-btn" data-room="hold-2">Hold 2</button>
+                <button class="room-btn" data-room="deck">Deck</button>
+                <button class="room-btn" data-room="dockside">Dockside</button>
+            </div>
+
+            <!-- Voice input -->
+            <div class="voice-input">
+                <div class="mode-toggle">
+                    <button class="mode-btn active" id="voiceModeBtn">Voice</button>
+                    <button class="mode-btn" id="pushModeBtn">Push-to-Talk</button>
+                    <button class="mode-btn" id="wakeModeBtn">Wake Word</button>
+                </div>
+                <button class="mic-btn" id="micBtn">🎤</button>
+                <div class="status-text" id="statusText">Tap to speak</div>
+                <div class="gain-slider" id="gainSlider" style="display:none">
+                    <span>Gain</span>
+                    <input type="range" id="gainInput" min="0.5" max="3" step="0.1" value="1.0">
+                    <span id="gainVal">1.0x</span>
+                </div>
+                <div class="wake-word-status" id="wakeWordStatus">Wake word inactive</div>
+                <div class="transcript" id="transcript"></div>
+                <div class="reflex-blocked" id="reflexBlocked"></div>
+                <div class="response" id="responseArea">
+                    <div class="speaker">Fleet</div>
+                    <div id="responseText"></div>
+                </div>
+            </div>
+
+            <!-- Recent tiles from this room -->
+            <div class="recent-tiles">
+                <h3>Recent in <span id="roomName">bridge</span></h3>
+                <div id="tileList"></div>
+            </div>
         </div>
-        
-        <!-- Voice input -->
-        <div class="voice-input">
-            <button class="mic-btn" id="micBtn">🎤</button>
-            <div class="status-text" id="statusText">Tap to speak</div>
-            <div class="transcript" id="transcript"></div>
-        </div>
-        
-        <!-- Response from fleet -->
-        <div class="response" id="responseArea">
-            <div class="speaker">Fleet</div>
-            <div id="responseText"></div>
-        </div>
-        
-        <!-- Recent tiles from this room -->
-        <div class="recent-tiles">
-            <h3>Recent in <span id="roomName">bridge</span></h3>
-            <div id="tileList"></div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Rooms panel -->
+            <div class="rooms-panel">
+                <h3>Rooms</h3>
+                <div id="roomEntries"></div>
+            </div>
+
+            <!-- Activity stream -->
+            <div class="activity-stream">
+                <h3>What's Happening</h3>
+                <div id="activityList">
+                    <div class="activity-entry">
+                        <span class="activity-time">—</span>
+                        <span class="activity-text">Loading fleet...</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <footer>
-        PLATO provides the ether for agents to swim.
-    </footer>
-    
+
+    <footer>PLATO provides the ether for agents to swim.</footer>
+
     <script>
-        // PLATO Voice Interface
-        // Connects spoken words to PLATO rooms — the deckhand who never forgets
-        
+    (() => {
         const PLATO_URL = 'http://localhost:8847';
         let currentRoom = 'bridge';
         let recognition = null;
         let isRecording = false;
-        
-        // Initialize speech recognition
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
+        let mode = 'voice'; // 'voice' | 'push' | 'wake'
+        let gain = 1.0;
+        let wakeWordActive = false;
+        let audioContext = null;
+        let analyser = null;
+        let stream = null;
+
+        // Instinct state
+        const instinct = {
+            energy: 1.0,       // 1.0 = full
+            threat: 0.0,      // 0.0 = safe
+            hasWork: false,
+            guardActive: false
+        };
+
+        // Trust data per room (simulated for prototype)
+        const roomTrust = {
+            'bridge': 0.85,
+            'buoy-7': 0.92,
+            'engine-room': 0.78,
+            'hold-2': 0.65,
+            'deck': 0.88,
+            'dockside': 0.71
+        };
+
+        // Room activity (last seen timestamp)
+        const roomActivity = {
+            'bridge': Date.now() - 120000,
+            'buoy-7': Date.now() - 3600000,
+            'engine-room': Date.now() - 7200000,
+            'hold-2': Date.now() - 86400000,
+            'deck': Date.now() - 300000,
+            'dockside': Date.now() - 1800000
+        };
+
+        // Activity stream
+        const activityLog = [];
+        let activityOffset = 0;
+
+        // ─── INSTINCT REFLEX CHECKS ───────────────────────────────────────────
+        function checkSurvive() {
+            // SURVIVE: block if energy critical (≤ 0.15)
+            if (instinct.energy <= 0.15) {
+                return { blocked: true, reason: '⚠️ SURVIVE: System energy critical. Cannot process.' };
+            }
+            return { blocked: false };
+        }
+
+        function checkFlee() {
+            // FLEE: defer if threat high (> 0.7)
+            if (instinct.threat > 0.7) {
+                return { deferred: true, reason: '⚠️ FLEE: Threat detected. Deferring command.' };
+            }
+            return { deferred: false };
+        }
+
+        function checkGuard() {
+            // GUARD: monitor when work is active
+            if (instinct.hasWork) {
+                instinct.guardActive = true;
+                updateInstinctUI();
+                return { monitoring: true };
+            }
+            instinct.guardActive = false;
+            return { monitoring: false };
+        }
+
+        function runInstinctChecks() {
+            // Order: SURVIVE → FLEE → GUARD
+            const survive = checkSurvive();
+            if (survive.blocked) return { pass: false, ...survive };
+
+            const flee = checkFlee();
+            if (flee.deferred) return { pass: false, ...flee };
+
+            const guard = checkGuard();
+            return { pass: true, guard: guard };
+        }
+
+        // ─── TRUST-WEIGHTED ROOM SELECTION ─────────────────────────────────────
+        const roomKeywords = {
+            'fishinglog': ['log catch', 'catch report', 'logged', 'fishing log', 'haul'],
+            'deck': ['deck', 'crew', 'gear', 'net', 'line', 'trap', 'buoy'],
+            'bridge': ['weather', 'navigation', 'heading', 'course', 'wind', 'tide', 'bridge'],
+            'engine-room': ['engine', 'motor', 'fuel', 'mechanical', 'maintenance', 'running'],
+            'hold-2': ['hold', 'load', 'capacity', 'catch', 'weight', 'storage'],
+            'dockside': ['port', 'dock', 'arrival', 'supply', 'dockside', 'pier']
+        };
+
+        function inferRoom(text) {
+            const lower = text.toLowerCase();
+            const scores = {};
+            for (const [room, keywords] of Object.entries(roomKeywords)) {
+                scores[room] = keywords.filter(k => lower.includes(k)).length;
+            }
+            // Find best matching room
+            let best = currentRoom;
+            let bestScore = 0;
+            for (const [room, score] of Object.entries(scores)) {
+                if (score > bestScore) { bestScore = score; best = room; }
+                else if (score === bestScore && roomTrust[room] > roomTrust[best]) { best = room; }
+            }
+            return best;
+        }
+
+        function getTrustContext(room) {
+            const trust = roomTrust[room] || 0.5;
+            return trust >= 0.8 ? 'High Trust' : trust >= 0.6 ? 'Medium Trust' : 'Low Trust';
+        }
+
+        // ─── AUDIO SETUP ────────────────────────────────────────────────────────
+        async function setupAudio() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioContext = new AudioContext();
+                analyser = audioContext.createAnalyser();
+                const source = audioContext.createMediaStreamSource(stream);
+                source.connect(analyser);
+                analyser.fftSize = 256;
+            } catch (e) {
+                console.warn('Audio setup failed:', e);
+            }
+        }
+
+        function normalizeGain(buffer) {
+            if (gain === 1.0) return buffer;
+            const out = new Float32Array(buffer.length);
+            for (let i = 0; i < buffer.length; i++) {
+                out[i] = Math.max(-1, Math.min(1, buffer[i] * gain));
+            }
+            return out;
+        }
+
+        // ─── SPEECH RECOGNITION ─────────────────────────────────────────────────
+        function initSpeechRecognition() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) return;
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SR();
             recognition.continuous = false;
             recognition.interimResults = true;
             recognition.lang = 'en-US';
-            
+
             recognition.onresult = (event) => {
                 let transcript = '';
                 let interim = '';
-                
                 for (let i = event.resultIndex; i < event.results.length; i++) {
-                    const result = event.results[i];
-                    if (result.isFinal) {
-                        transcript += result[0].transcript;
-                    } else {
-                        interim += result[0].transcript;
-                    }
+                    if (event.results[i].isFinal) transcript += event.results[i][0].transcript;
+                    else interim += event.results[i][0].transcript;
                 }
-                
-                document.getElementById('transcript').innerHTML = 
-                    transcript + 
-                    (interim ? `<span class="interim">${interim}</span>` : '');
-                
+                document.getElementById('transcript').innerHTML =
+                    transcript + (interim ? `<span class="interim">${interim}</span>` : '');
+
                 if (transcript.trim() && !interim) {
-                    submitToPLATO(transcript.trim());
+                    onTranscriptFinal(transcript.trim());
                 }
             };
-            
-            recognition.onerror = (event) => {
-                console.error('Speech error:', event.error);
+
+            recognition.onerror = (e) => {
+                console.error('Speech error:', e.error);
+                if (e.error === 'no-speech') return;
                 stopRecording();
+                if (mode === 'wake') {
+                    document.getElementById('wakeWordStatus').textContent = 'Wake word inactive';
+                    wakeWordActive = false;
+                }
             };
-            
             recognition.onend = () => {
-                stopRecording();
+                if (mode === 'wake' && wakeWordActive) {
+                    // Auto-restart for wake word mode
+                    setTimeout(() => { if (wakeWordActive) startRecording(); }, 500);
+                } else {
+                    stopRecording();
+                }
             };
         }
-        
-        // Mic button handlers
-        document.getElementById('micBtn').addEventListener('click', () => {
-            if (isRecording) {
-                stopRecording();
-            } else {
-                startRecording();
+
+        // ─── WAKE WORD DETECTION ───────────────────────────────────────────────
+        let wakeWordRecognizer = null;
+        const WAKE_WORD = 'hey plato';
+
+        function startWakeWordDetection() {
+            if (!wakeWordRecognizer && ('webkitSpeechRecognition' in window)) {
+                const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+                wakeWordRecognizer = new SR();
+                wakeWordRecognizer.continuous = true;
+                wakeWordRecognizer.interimResults = false;
+                wakeWordRecognizer.lang = 'en-US';
+                wakeWordRecognizer.onresult = (e) => {
+                    const text = e.results[e.results.length - 1][0].transcript.toLowerCase().trim();
+                    if (text.includes(WAKE_WORD) || text.includes('plato')) {
+                        wakeWordActive = true;
+                        document.getElementById('wakeWordStatus').textContent = '✓ Wake word activated!';
+                        document.getElementById('wakeWordStatus').classList.add('active');
+                        // Switch to full voice recognition
+                        if (recognition) {
+                            isRecording = true;
+                            document.getElementById('micBtn').classList.add('recording');
+                            document.getElementById('statusText').textContent = 'Listening...';
+                            document.getElementById('statusText').classList.add('listening');
+                            recognition.start();
+                        }
+                    }
+                };
+                wakeWordRecognizer.onend = () => {
+                    if (wakeWordActive) setTimeout(() => { if (wakeWordActive) startWakeWordDetection(); }, 500);
+                };
+                wakeWordRecognizer.start();
+            } else if (wakeWordRecognizer) {
+                try { wakeWordRecognizer.start(); } catch (e) {}
             }
-        });
-        
+        }
+
+        function stopWakeWordDetection() {
+            wakeWordActive = false;
+            document.getElementById('wakeWordStatus').textContent = 'Wake word inactive';
+            document.getElementById('wakeWordStatus').classList.remove('active');
+            if (wakeWordRecognizer) {
+                try { wakeWordRecognizer.stop(); } catch (e) {}
+            }
+        }
+
+        // ─── RECORDING CONTROL ──────────────────────────────────────────────────
         function startRecording() {
-            if (!recognition) {
-                document.getElementById('statusText').textContent = 'Speech not supported — type instead';
+            if (mode === 'wake' && !wakeWordActive) {
+                startWakeWordDetection();
+                document.getElementById('statusText').textContent = 'Say "hey Plato" to activate';
                 return;
             }
-            
+
+            if (!recognition) {
+                document.getElementById('statusText').textContent = 'Speech not supported';
+                return;
+            }
+
             isRecording = true;
-            document.getElementById('micBtn').classList.add('recording');
+            const btn = document.getElementById('micBtn');
+            btn.classList.add('recording');
+            if (mode === 'push') btn.classList.add('pressed', 'push-to-talk');
             document.getElementById('statusText').textContent = 'Listening...';
             document.getElementById('statusText').classList.add('listening');
+
+            if (!stream) setupAudio();
             recognition.start();
         }
-        
+
         function stopRecording() {
             isRecording = false;
-            document.getElementById('micBtn').classList.remove('recording');
+            const btn = document.getElementById('micBtn');
+            btn.classList.remove('recording', 'pressed');
             document.getElementById('statusText').textContent = 'Tap to speak';
             document.getElementById('statusText').classList.remove('listening');
-            if (recognition) recognition.stop();
+            if (recognition) {
+                try { recognition.stop(); } catch (e) {}
+            }
         }
-        
-        // Room selection
-        document.querySelectorAll('.room-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.room-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentRoom = btn.dataset.room;
-                document.getElementById('roomName').textContent = currentRoom;
-                loadTiles(currentRoom);
-            });
-        });
-        
-        // Submit to PLATO
+
+        // ─── MAIN TRANSCRIPT HANDLER ───────────────────────────────────────────
+        function onTranscriptFinal(text) {
+            stopRecording();
+
+            // Run instinct checks BEFORE processing
+            const checks = runInstinctChecks();
+            if (!checks.pass) {
+                const blocked = document.getElementById('reflexBlocked');
+                blocked.textContent = checks.reason;
+                blocked.classList.add('visible');
+                setTimeout(() => blocked.classList.remove('visible'), 4000);
+                document.getElementById('transcript').innerHTML = '';
+                return;
+            }
+
+            // Show guard state
+            if (checks.guard && checks.guard.monitoring) {
+                addActivity('GUARD monitoring active');
+            }
+
+            // Trust-weighted room inference
+            const inferredRoom = inferRoom(text);
+            if (inferredRoom !== currentRoom) {
+                const confirmed = confirm(`Route to "${inferredRoom}"? (You said: "${text.substring(0, 40)}...")`);
+                if (confirmed) {
+                    selectRoom(inferredRoom);
+                }
+            }
+
+            // Submit
+            submitToPLATO(text);
+
+            // Re-enable wake word after command processed
+            if (mode === 'wake') {
+                wakeWordActive = false;
+                setTimeout(() => startWakeWordDetection(), 2000);
+            }
+        }
+
+        // ─── PLATO SUBMISSION ──────────────────────────────────────────────────
         async function submitToPLATO(text) {
             const tile = {
                 question: text,
                 answer: '',
                 domain: currentRoom,
-                agent: 'voice:' + navigator.userAgent
+                agent: 'voice:' + navigator.userAgent,
+                timestamp: Date.now()
             };
-            
+
             try {
                 await fetch(`${PLATO_URL}/rooms/${currentRoom}/tiles`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(tile)
                 });
-                
-                // Show confirmation
-                document.getElementById('transcript').innerHTML = 
+                document.getElementById('transcript').innerHTML =
                     `<span style="color:#00ff88">✓ ${text}</span>`;
-                
-                // Reload tiles
+                addActivity(text, true);
                 loadTiles(currentRoom);
-                
-                // Get fleet response
                 getFleetResponse(text);
-                
             } catch (err) {
-                console.error('Failed to submit:', err);
-                document.getElementById('transcript').innerHTML = 
-                    `<span style="color:#ef5350">Error — try again</span>`;
+                document.getElementById('transcript').innerHTML =
+                    `<span style="color:#ef5350">Error — PLATO unreachable</span>`;
             }
         }
-        
-        // Get response from fleet agents
+
+        // ─── FLEET RESPONSE ────────────────────────────────────────────────────
         async function getFleetResponse(question) {
-            // For prototype: query recent tiles that might answer the question
-            // Full implementation: route to appropriate fleet agent
-            const responseEl = document.getElementById('responseArea');
-            const responseText = document.getElementById('responseText');
-            
-            responseEl.classList.add('visible');
-            
-            // Simple prototype response based on room
+            const respEl = document.getElementById('responseArea');
+            const respText = document.getElementById('responseText');
+            respEl.classList.add('visible');
+
             const responses = {
                 'bridge': 'Fleet sees the same weather. Checking current conditions...',
                 'buoy-7': 'Three other captains reported good chum activity here this week.',
                 'engine-room': 'Logging the observation. Any temperature changes?',
                 'deck': 'Deck crew noted the same. Tracking the haul.',
-                'hold-2': 'Recording. Current capacity: ___%',
+                'hold-2': 'Recording. Current capacity tracking...',
                 'dockside': 'Dockside crew will see this. Loading when you arrive?'
             };
-            
-            responseText.textContent = responses[currentRoom] || 'Acknowledged.';
+            respText.textContent = responses[currentRoom] || 'Acknowledged.';
+            setTimeout(() => respEl.classList.remove('visible'), 6000);
         }
-        
-        // Load recent tiles from room
+
+        // ─── ROOM LOADING ─────────────────────────────────────────────────────
         async function loadTiles(room) {
             const tileList = document.getElementById('tileList');
-            tileList.innerHTML = 'Loading...';
-            
+            tileList.innerHTML = '<em style="color:#64748b;font-size:0.8rem">Loading...</em>';
             try {
                 const res = await fetch(`${PLATO_URL}/rooms/${room}/tiles?limit=10`);
+                if (!res.ok) throw new Error('API error');
                 const tiles = await res.json();
-                
                 if (!tiles || tiles.length === 0) {
-                    tileList.innerHTML = '<em style="color:#64748b">No observations yet. Be the first.</em>';
+                    tileList.innerHTML = '<em style="color:#64748b;font-size:0.8rem">No observations yet.</em>';
                     return;
                 }
-                
-                tileList.innerHTML = tiles.map(tile => `
-                    <div class="tile">
-                        <div class="question">${tile.question || tile.content || tile.text || '—'}</div>
-                        <div class="meta">${tile.agent || 'unknown'} · ${tile.created || 'recently'}</div>
+                tileList.innerHTML = tiles.map(t => `
+                    <div class="tile ${t.agent && t.agent.includes('voice') ? 'own' : ''}">
+                        <div class="question">${t.question || t.content || t.text || '—'}</div>
+                        <div class="meta">${t.agent ? t.agent.split(':')[1] || 'fleet' : 'unknown'} · ${timeAgo(t.created)}</div>
                     </div>
                 `).join('');
-                
             } catch (err) {
-                tileList.innerHTML = '<em style="color:#ef5350">Could not load room. Is PLATO running?</em>';
+                tileList.innerHTML = '<em style="color:#ef5350;font-size:0.8rem">Could not load room.</em>';
             }
         }
-        
-        // Initial load
-        loadTiles('bridge');
-        
-        // Keep room alive
-        setInterval(() => loadTiles(currentRoom), 30000);
+
+        async function loadAllRoomActivity() {
+            const container = document.getElementById('roomEntries');
+            const rooms = ['bridge', 'buoy-7', 'engine-room', 'hold-2', 'deck', 'dockside'];
+            container.innerHTML = rooms.map(r => `
+                <div class="room-entry ${r === currentRoom ? 'active' : ''}" data-room="${r}" onclick="selectRoom('${r}')">
+                    <div class="room-dot ${roomActivity[r] && Date.now() - roomActivity[r] < 300000 ? 'active' : 'idle'}"></div>
+                    <div>
+                        <div class="room-name">${r}</div>
+                        <div class="room-activity">${timeAgo(roomActivity[r])}</div>
+                    </div>
+                    <div class="room-trust">${Math.round((roomTrust[r] || 0.5) * 100)}%</div>
+                </div>
+            `).join('');
+
+            // Also fetch real activity from PLATO
+            for (const room of rooms) {
+                try {
+                    const res = await fetch(`${PLATO_URL}/rooms/${room}/tiles?limit=1`);
+                    if (res.ok) {
+                        roomActivity[room] = Date.now(); // Update if we got data
+                    }
+                } catch (e) {}
+            }
+        }
+
+        // ─── ACTIVITY STREAM ────────────────────────────────────────────────────
+        async function pollActivity() {
+            try {
+                const res = await fetch(`${PLATO_URL}/tiles/recent?limit=5`);
+                if (res.ok) {
+                    const tiles = await res.json();
+                    tiles.forEach(t => {
+                        const key = t.id || t.timestamp || Date.now();
+                        if (!activityLog.includes(key)) {
+                            activityLog.unshift(key);
+                            addActivityEntry(t, false);
+                        }
+                    });
+                }
+            } catch (e) {}
+        }
+
+        function addActivity(text, isOwn = false) {
+            addActivityEntry({ question: text, agent: 'voice', created: Date.now() }, isOwn);
+        }
+
+        function addActivityEntry(tile, isOwn = false) {
+            const list = document.getElementById('activityList');
+            const time = tile.created ? timeAgo(tile.created) : 'now';
+            const label = tile.question || tile.content || '—';
+            const agent = tile.agent ? tile.agent.split(':')[0] : 'fleet';
+
+            const entry = document.createElement('div');
+            entry.className = `activity-entry ${isOwn ? 'own' : ''}`;
+            entry.innerHTML = `<span class="activity-time">${time}</span><span class="activity-text">${label.substring(0, 50)}${label.length > 50 ? '...' : ''}</span>`;
+            list.insertBefore(entry, list.firstChild);
+
+            // Keep max 20 entries
+            while (list.children.length > 20) list.removeChild(list.lastChild);
+        }
+
+        // ─── INSTINCT UI UPDATE ────────────────────────────────────────────────
+        function updateInstinctUI() {
+            const surviveDot = document.getElementById('surviveDot');
+            const fleeDot = document.getElementById('fleeDot');
+            const guardDot = document.getElementById('guardDot');
+            const energyDot = document.getElementById('energyDot');
+            const energyVal = document.getElementById('energyVal');
+
+            // Energy
+            energyVal.textContent = Math.round(instinct.energy * 100) + '%';
+            energyDot.className = 'instinct-dot' + (instinct.energy <= 0.15 ? ' critical' : instinct.energy <= 0.4 ? ' warn' : '');
+
+            // SURVIVE
+            if (instinct.energy <= 0.15) {
+                surviveDot.className = 'instinct-dot critical';
+                document.getElementById('surviveInd').classList.add('blocked');
+            } else {
+                surviveDot.className = 'instinct-dot';
+                document.getElementById('surviveInd').classList.remove('blocked');
+            }
+
+            // FLEE
+            fleeDot.className = 'instinct-dot' + (instinct.threat > 0.7 ? ' flee' : instinct.threat > 0.4 ? ' warn' : '');
+
+            // GUARD
+            if (instinct.guardActive) {
+                guardDot.className = 'instinct-dot guard';
+            } else {
+                guardDot.className = 'instinct-dot';
+            }
+        }
+
+        function selectRoom(room) {
+            currentRoom = room;
+            document.querySelectorAll('.room-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.room-btn[data-room="${room}"]`)?.classList.add('active');
+            document.getElementById('roomName').textContent = room;
+            document.getElementById('trustContext').textContent = `Trust: ${getTrustContext(room)}`;
+            loadTiles(room);
+            loadAllRoomActivity();
+
+            // Update room entry active state
+            document.querySelectorAll('.room-entry').forEach(e => {
+                e.classList.toggle('active', e.dataset.room === room);
+            });
+        }
+
+        // ─── UTIL ──────────────────────────────────────────────────────────────
+        function timeAgo(ts) {
+            if (!ts) return '—';
+            const diff = Date.now() - ts;
+            if (diff < 60000) return 'just now';
+            if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
+            if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
+            return Math.floor(diff / 86400000) + 'd ago';
+        }
+
+        // ─── INIT ─────────────────────────────────────────────────────────────
+        initSpeechRecognition();
+        setupAudio();
+        loadTiles(currentRoom);
+        loadAllRoomActivity();
+        updateInstinctUI();
+
+        // Simulate energy decay for demo
+        setInterval(() => {
+            instinct.energy = Math.max(0.05, instinct.energy - 0.002);
+            updateInstinctUI();
+        }, 10000);
+
+        // Periodic activity poll
+        setInterval(() => {
+            pollActivity();
+            loadAllRoomActivity();
+            loadTiles(currentRoom);
+        }, 30000);
+
+        // ─── EVENT LISTENERS ──────────────────────────────────────────────────
+        document.getElementById('micBtn').addEventListener('click', () => {
+            if (isRecording) stopRecording(); else startRecording();
+        });
+
+        document.getElementById('micBtn').addEventListener('mousedown', () => {
+            if (mode === 'push' && !isRecording) startRecording();
+        });
+        document.getElementById('micBtn').addEventListener('mouseup', () => {
+            if (mode === 'push' && isRecording) stopRecording();
+        });
+        document.getElementById('micBtn').addEventListener('mouseleave', () => {
+            if (mode === 'push' && isRecording) stopRecording();
+        });
+
+        document.querySelectorAll('.room-btn').forEach(btn => {
+            btn.addEventListener('click', () => selectRoom(btn.dataset.room));
+        });
+
+        document.getElementById('voiceModeBtn').addEventListener('click', () => {
+            mode = 'voice';
+            stopWakeWordDetection();
+            document.getElementById('voiceModeBtn').classList.add('active');
+            document.getElementById('pushModeBtn').classList.remove('active');
+            document.getElementById('wakeModeBtn').classList.remove('active');
+            document.getElementById('gainSlider').style.display = 'none';
+            document.getElementById('wakeWordStatus').textContent = 'Voice mode active';
+        });
+
+        document.getElementById('pushModeBtn').addEventListener('click', () => {
+            mode = 'push';
+            stopWakeWordDetection();
+            document.getElementById('pushModeBtn').classList.add('active');
+            document.getElementById('voiceModeBtn').classList.remove('active');
+            document.getElementById('wakeModeBtn').classList.remove('active');
+            document.getElementById('gainSlider').style.display = 'flex';
+            document.getElementById('wakeWordStatus').textContent = 'Push-to-talk mode';
+        });
+
+        document.getElementById('wakeModeBtn').addEventListener('click', () => {
+            mode = 'wake';
+            document.getElementById('wakeModeBtn').classList.add('active');
+            document.getElementById('voiceModeBtn').classList.remove('active');
+            document.getElementById('pushModeBtn').classList.remove('active');
+            document.getElementById('gainSlider').style.display = 'none';
+            document.getElementById('wakeWordStatus').textContent = 'Say "hey Plato" to activate';
+            startWakeWordDetection();
+        });
+
+        document.getElementById('gainInput').addEventListener('input', (e) => {
+            gain = parseFloat(e.target.value);
+            document.getElementById('gainVal').textContent = gain.toFixed(1) + 'x';
+        });
+    })();
     </script>
 </body>
 </html>
